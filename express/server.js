@@ -5,6 +5,9 @@ const serverless = require('serverless-http');
 const app = express();
 const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}))
+
 // const router = express.Router();
 // router.get('/', (req, res) => {
 //   res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -16,16 +19,16 @@ const bodyParser = require('body-parser');
 // });
 // router.post('/', (req, res) => res.json({ postBody: req.body }));
 
-app.use(bodyParser.json());
-app.use('/api', require('./router/api'))
+app.use('/api', require('./api'))
 
 // app.use('/.netlify/functions/server', router);  // path must route to lambda
 
-app.use( '/', express.static( path.join(__dirname, '../', '/dist') ) );
-
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../', '/dist/index.html'))
+app.use( '/', express.static( path.join(__dirname, '../dist') ) );
+const router = express.Router();
+router.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
+app.use('/', router);
 
 module.exports = app;
 module.exports.handler = serverless(app);
