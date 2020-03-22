@@ -18,7 +18,12 @@ router.get('/', (req, res) => {
   res.end();
 });
 router.get('/another', (req, res) => {
-  res.send('sample')
+  res.send({
+      data: 'sample',
+      a: [
+          'sample'
+      ]
+  })
 });
 router.post('/', (req, res) => res.json({ postBody: req.body }));
 
